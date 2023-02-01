@@ -36,14 +36,27 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    "whitenoise.runserver_nostatic",
     'django.contrib.staticfiles',
+    'rest_framework',
+    'corsheaders',
     
     'todos'
 ]
 
+# AllowAny: Tạo quyền truy cập các api 
+REST_FRAMEWORK = {
+    "DEFAULT_PERMISSION_CLASSES":
+        [
+            "rest_framework.permissions.AllowAny",
+        ],
+}
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    "corsheaders.middleware.CorsMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -119,7 +132,23 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+# Whitenoise 
+STATICFILES_DIRS = [BASE_DIR / "static"]
+STATIC_ROOT = BASE_DIR / "staticfiles"
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
+
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Cros - Tùy trường hợp chạy môi trường ảo
+CORS_ALLOWED_ORIGINS = (
+    "http://localhost:3000",
+    "http://localhost:8000",
+)
+
+# CSRF_TRUSTED_ORIGINS = ["localhost:3000"]
+ALLOWED_HOSTS = [".herokuapp.com", "localhost", "127.0.0.1"]
